@@ -1,5 +1,5 @@
 ﻿using Business.Concrete;
-using DataAccess.Concrete.InMemory;
+using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 
 using System;
@@ -10,30 +10,16 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            CarManager carManager = new CarManager(new InMemoryCarDal());
+            CarManager carManager = new CarManager(new EfCarDal());
 
-            Car car1 = new Car
+            carManager.Add(new Car { BrandId = 2, ColorId = 2, ModelYear = 2017, Description = "Chevrolet A Series", DailyPrice = 250 }); // We are not using CarId because it is Auto Incremented in database.
+
+            foreach (var c in carManager.GetAll())
             {
-                ID = 6,
-                BrandID = 5,
-                DailyPrice = 450,
-                ModelYear = 1998,
-                Description = "Mercedes-Benz CLK GTR"
-            };
-            carManager.Add(car1);
-
-            car1.DailyPrice = 550;
-            carManager.Update(car1);
-
-            foreach (var cars in carManager.GetByBrandID(3))
-            {
-                Console.WriteLine("ID: {0} | Description: {1}", cars.ID, cars.Description);
+                Console.WriteLine("ID: {0} | Name: {1}", c.CarId, c.Description);
             }
 
-            foreach (var cars in carManager.GetAll())
-            {
-                Console.WriteLine("ID: {0} | Brand ID: {1} | Description: {2}", cars.ID, cars.BrandID, cars.Description);
-            }
+            // etc. etc.
 
         }
     }
